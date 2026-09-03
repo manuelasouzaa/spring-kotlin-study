@@ -10,6 +10,19 @@ class CouponService(
     private val repository: CouponRepository
 ) {
 
+    fun fetch(code: String): CouponDto? {
+        val entity = repository.findByCode(code)
+
+        return entity?.let {
+            CouponDto(
+                id = it.id!!,
+                code = it.code,
+                owner = it.owner,
+                clicks = it.clicks
+            )
+        }
+    }
+
     fun register(code: String, owner: String): CouponDto {
         val entity = CouponEntity(
             code = code.trim(),
