@@ -9,6 +9,17 @@ import org.springframework.stereotype.Service
 class CouponService(
     private val repository: CouponRepository
 ) {
+    private val domain = "https://www.google.com"
+
+    fun click(code: String): String {
+        val entity = repository.findByCode(code)
+
+        return entity?.let {
+            entity.clicks +=1
+            repository.save(entity)
+            "$domain/search?q=${it.code}"
+        } ?: domain
+    }
 
     fun fetch(code: String): CouponDto? {
         val entity = repository.findByCode(code)
